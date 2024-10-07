@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Eventos Web</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+    />
+    <link
+      href="https://cdn.rawgit.com/nizarmah/calendar-javascript-lib/master/calendarorganizer.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/@fullcalendar/core/main.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="estilos.css" />
+    <link href="calendarorganizer.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="estilos1.css" />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.3/jspdf.umd.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@fullcalendar/core/main.min.js"
+      defer
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid/main.min.js"
+      defer
+    ></script>
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <div class="titulo text-center">
+      <h2>Planificador de Eventos Web</h2>
+    </div>
+
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button
+            type="button"
+            class="navbar-toggle"
+            data-toggle="collapse"
+            data-target="#myNavbar"
+          >
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
+
+        <div class="collapse navbar-collapse" id="myNavbar">
+          <ul class="nav navbar-nav">
+            <li data-target="EventoSimple"><a href="#">Evento Simple</a></li>
+            <li data-target="RegistrarEvento">
+              <a href="#">RegistrarEvento</a>
+            </li>
+            <li data-target="ListaDeseos"><a href="#">Lista de Deseos</a></li>
+            <li data-target="Proveedores"><a href="#">Proveedores</a></li>
+            <li data-target="Presupuesto"><a href="#">Presupuesto</a></li>
+            <li data-target="HorarioEve"><a href="#">Horario de Evento</a></li>
+            <li data-target="Informe"><a href="#">Informe</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li data-target="Login">
+              <a href="#"
+                ><span class="glyphicon glyphicon-log-in"></span> Login</a
+              >
+            </li>
+            <li data-target="API">
+              <a href="#"
+                ><span class="glyphicon glyphicon-log-in"></span> Google</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid text-center">
+      <!--Contenido de la linea del menu del proyecto-->
+      <div class="row content">
+        <!--Seccion Evento Simple-->
+        <div data-target="EventoSimple" class="col-sm-12 text-left">
+          <h1>Evento Simple</h1>
+          <!-- Contenedor de pasos -->
+          <div id="pasos" class="pasos">
+            <!-- Paso 1: Tipo de evento y fecha -->
+            <div id="paso1" class="paso" style="display: block">
+              <h3>Paso 1: Tipo de evento y fecha</h3>
+              <div class="form-group">
+                <label for="tipoEvento">Tipo de Evento:</label>
+                <select class="form-control" id="tipoEvento">
+                  <option value="boda">Boda</option>
+                  <option value="cumpleanos">Cumpleaños</option>
+                  <option value="bautizo">Bautizo</option>
+                  <!-- Agrega más opciones según sea necesario -->
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="fechaEvento">Fecha:</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  id="fechaEvento"
+                  required
+                />
+              </div>
+            </div>
+
+            <!-- Paso 2: Ubicación -->
+            <div id="paso2" class="paso" style="display: none">
+              <h3>Paso 2: Ubicación</h3>
+              <div class="form-group">
+                <label for="ubicacion">Ubicación:</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="ubicacion"
+                  placeholder="Ingrese la ubicación del evento"
+                  required
+                />
+              </div>
+              <!-- Agrega más campos según sea necesario para este paso -->
+            </div>
+
+            <!-- Paso 3: Comida -->
+            <div id="paso3" class="paso" style="display: none">
+              <h3>Paso 3: Comida</h3>
+              <div class="form-group">
+                <label for="tipoComida">Tipo de comida:</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="tipoComida"
+                  placeholder="Ingrese el tipo de comida"
+                />
+              </div>
+              <div class="form-group">
+                <label for="platosPrincipales">Platos principales:</label>
+                <textarea
+                  class="form-control"
+                  id="platosPrincipales"
+                  rows="3"
+                  placeholder="Ingrese los platos principales"
+                ></textarea>
+              </div>
+              <div class="form-group">
+                <label for="aperitivos">Aperitivos:</label>
+                <textarea
+                  class="form-control"
+                  id="aperitivos"
+                  rows="3"
+                  placeholder="Ingrese los aperitivos"
+                ></textarea>
+              </div>
+              <div class="form-group">
+                <label for="postres">Postres:</label>
+                <textarea
+                  class="form-control"
+                  id="postres"
+                  rows="3"
+                  placeholder="Ingrese los postres"
+                ></textarea>
+              </div>
+              <!-- Agrega más campos según sea necesario para este paso -->
+            </div>
+
+            <!-- Paso 4: Invitados -->
+            <div id="paso4" class="paso" style="display: none">
+              <h3>Paso 4: Invitados</h3>
+              <div class="form-group">
+                <label for="cantidadAdultos">Cantidad de adultos:</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="cantidadAdultos"
+                  placeholder="Ingrese la cantidad de adultos"
+                />
+              </div>
+              <div class="form-group">
+                <label for="cantidadNinos">Cantidad de niños:</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="cantidadNinos"
+                  placeholder="Ingrese la cantidad de niños"
+                />
+              </div>
+              <div class="form-group">
+                <label for="cantidadInfantes">Cantidad de infantes:</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="cantidadInfantes"
+                  placeholder="Ingrese la cantidad de infantes"
+                />
+              </div>
+              <!-- Agrega más campos según sea necesario para este paso -->
+            </div>
+
+            <!-- Paso 5: Presupuesto -->
+            <div id="paso5" class="paso" style="display: none">
+              <h3>Paso 5: Presupuesto</h3>
+              <div class="form-group">
+                <label for="presupuestoTotal">Presupuesto total:</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="presupuestoTotal"
+                  placeholder="Ingrese el presupuesto total"
+                />
+              </div>
+              <div class="form-group">
+                <label for="presupuestoComida">Presupuesto para comida:</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="presupuestoComida"
+                  placeholder="Ingrese el presupuesto para comida"
+                />
+              </div>
+              <div class="form-group">
+                <label for="presupuestoDecoracion"
+                  >Presupuesto para decoración:</label
+                >
+                <input
+                  type="number"
+                  class="form-control"
+                  id="presupuestoDecoracion"
+                  placeholder="Ingrese el presupuesto para decoración"
+                />
+              </div>
+              <!-- Agrega más campos según sea necesario para este paso -->
+            </div>
+
+            <!-- Paso 6: Resumen y Pago -->
+            <div id="paso6" class="paso" style="display: none">
+              <h3>Paso 6: Resumen y Pago</h3>
+              <div class="form-group">
+                <label for="resumenEvento">Resumen del evento:</label>
+                <textarea
+                  class="form-control"
+                  id="resumenEvento"
+                  rows="5"
+                  placeholder="Ingrese un resumen del evento"
+                ></textarea>
+              </div>
+              <div class="form-group">
+                <label for="formaPago">Forma de pago:</label>
+                <select class="form-control" id="formaPago">
+                  <option value="tarjeta">Tarjeta de crédito/débito</option>
+                  <option value="deposito">Depósito bancario</option>
+                  <!-- Agrega más opciones según sea necesario -->
+                </select>
+              </div>
+              <!-- Agrega más campos según sea necesario para este paso -->
+            </div>
+
+            <!-- Botones para navegar entre pasos -->
+            <div class="text-center">
+              <button
+                type="button"
+                class="btn btn-primary"
+                onclick="anteriorPaso()"
+              >
+                Anterior
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                onclick="siguientePaso()"
+              >
+                Siguiente
+              </button>
+            </div>
+          </div>
+        </div>
+        <!--Fin de la Seccion Evento Simple-->
+
+        <!--Seccion Registrar Eventos-->
+        <div data-target="RegistrarEvento" class="col-sm-8 text-left">
+          <!--Seccion de Registrar Evento-->
+          <h3>Registrar Evento</h3>
+          <form id="registroEventoForm">
+            <div class="form-group">
+              <label for="nombreEvento">Nombre del Evento:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="nombreEvento"
+                placeholder="Ingrese el nombre del evento"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="fechaEvento">Fecha:</label>
+              <input
+                type="date"
+                class="form-control"
+                id="fechaEvento"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="horaInicio">Hora de Inicio:</label>
+              <input
+                type="time"
+                class="form-control"
+                id="horaInicio"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="horaFin">Hora de Fin:</label>
+              <input type="time" class="form-control" id="horaFin" required />
+            </div>
+            <div class="form-group">
+              <label for="ubicacionEvento">Ubicación:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="ubicacionEvento"
+                placeholder="Ingrese la ubicación del evento"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="tipoEvento">Tipo de Evento:</label>
+              <select class="form-control" id="tipoEvento" required>
+                <option value="comunion">Comunión</option>
+                <option value="bautizo">Bautizo</option>
+                <option value="confirmacion">Confirmación</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="invitacionEvento">Invitación:</label>
+              <input
+                type="file"
+                class="form-control-file"
+                id="invitacionEvento"
+              />
+            </div>
+            <div class="form-group">
+              <label>Invitados:</label>
+              <table class="table" id="tablaInvitados">
+                <thead>
+                  <tr>
+                    <th>Nombre</th>
+                    <th>Teléfono</th>
+                    <th>Correo</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Aquí se agregarán las filas de invitados dinámicamente -->
+                </tbody>
+              </table>
+              <button
+                type="button"
+                class="btn btn-primary"
+                id="btnAgregarInvitado"
+              >
+                Agregar Invitado
+              </button>
+              <button
+                type="button"
+                class="btn btn-danger"
+                id="btnEliminarInvitado"
+              >
+                Eliminar Invitado
+              </button>
+            </div>
+            <button type="submit" class="btn btn-success">
+              Registrar Evento
+            </button>
+          </form>
+          <p>
+            --------------------------------------------------------------------------------------------------------------------------
+            -------------------------------------------------------------------------------------------------------------------------
+            -------------------------------------------------------------------------------------------------------------------------
+            -------------------------------------------------------------------------------------------------------------------------
+            -------------------------------------------------------------------------------------------------------------------------
+            -------------------------------------------------------------------------------------------------------------------------
+            -------------------------------------------------------------------------------------------------------------------------
+          </p>
+          <!--Fin de la seccion de Registrar Evento-->
+        </div>
+        <!--Seccion del Calendario-->
+        <div
+          data-target="RegistrarEvento"
+          class="col-sm-4 col-sidebar special-column"
+        >
+          <div class="well">
+            <!--Empieza el calendario-->
+            <iframe
+              id="calendar-iframe"
+              src="https://calendar.google.com/calendar/embed?src=juan04gamer%40gmail.com&ctz=America%2FMexico_City"
+              frameborder="0"
+              scrolling="no"
+            ></iframe>
+            <!--Fin de la seccion del Calendario-->
+          </div>
+        </div>
+        <!--Fin de la Seccion Registrar Evento-->
+
+        <!--Seccion de Lista de Deseos-->
+        <div data-target="ListaDeseos" class="col-sm-12 text-left">
+          <h1>Lista de Deseos</h1>
+
+          <!-- Contexto y explicación de la funcionalidad -->
+          <p>
+            La lista de deseos te permite organizar y agregar todo lo que te
+            gustaría tener o realizar en tu evento. Puedes escribir pequeños
+            párrafos describiendo tus ideas, preferencias y cualquier detalle
+            que desees tener presente. selecciona un Planificador que desea
+            realizar su evento a su vez que un asesor vera su lista y este se
+            asegurara de fijar los proveedores y elementos que se adapten a su
+            lista de deseos y conforme a su presupuesto. IMPORTANTE MENCIONAR:
+            El presupuesto, La cantidad de Invitados(Si son adultos o Jovenes),
+            Fecha y Hora del Evento. NO OLVIDAR NINGUN detalle Tambien de que
+            debera cumplir con un anticipo y/o Cotizacion para poder realizar su
+            evento si no hay respuesta despues de un tiempo limite se cancelara
+            automaticamente el evento.
+          </p>
+
+          <!-- Formulario para agregar elementos a la lista de deseos -->
+          <form id="formAgregarDeseo">
+            <div class="form-group">
+              <label for="elementoDeseado">Agregar a la lista de deseos:</label>
+              <textarea
+                class="form-control"
+                id="elementoDeseado"
+                rows="10"
+                placeholder="Escribe aquí lo que deseas agregar"
+              ></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Agregar</button>
+          </form>
+          <!-- Lista de planificadores con opiniones y puntajes -->
+          <h2>Planificadores</h2>
+          <ul id="listaPlanificadores">
+            <li>
+              <div>
+                <h3>Eduardo Gomez</h3>
+                <p>Opinión: Rapido y Atento a la hora de operar.</p>
+                <p>Puntuación: ★★★★☆</p>
+                <button type="button" class="btn btn-primary btn-seleccionar">
+                  Seleccionar
+                </button>
+                <button type="button" class="btn btn-info btn-opinion">
+                  Opinar
+                </button>
+              </div>
+            </li>
+            <!-- Repite este bloque de planificador para cada planificador -->
+          </ul>
+          <p>
+            -------------------------------------------------------------------------------------------------------------------------
+            -------------------------------------------------------------------------------------------------------------------------
+            -------------------------------------------------------------------------------------------------------------------------
+            -------------------------------------------------------------------------------------------------------------------------
+          </p>
+        </div>
+        <!--Fin de la Seccion de Lista de Deseos-->
+
+        <!--Seccion Proveedores-->
+        <div data-target="Proveedores" class="col-sm-12 text-left">
+          <h3>Proveedores</h3>
+          <p>¿Quieres un proveedor en específico? Búscalo</p>
+          <div class="form-group">
+            <label for="servicio">Servicio:</label>
+            <input
+              type="text"
+              class="form-control"
+              id="servicio"
+              placeholder="Ingrese el servicio que busca"
+            />
+          </div>
+          <div class="form-group">
+            <label for="ubicacion">Ubicación:</label>
+            <input
+              type="text"
+              class="form-control"
+              id="ubicacion"
+              placeholder="Ingrese la ubicación del servicio"
+            />
+          </div>
+          <button type="button" class="btn btn-primary">Buscar</button>
+
+          <!-- Formulario de registro de proveedor -->
+          <div
+            id="registroProveedorForm"
+            class="registro-proveedor-form"
+            style="display: none"
+          >
+            <h3>Registrar Proveedor</h3>
+            <form id="registroProveedor">
+              <div class="form-group">
+                <label for="nombreProveedor">Nombre:</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="nombreProveedor"
+                  placeholder="Ingrese el nombre del proveedor"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="contactoProveedor">Contacto Telefónico:</label>
+                <input
+                  type="tel"
+                  class="form-control"
+                  id="contactoProveedor"
+                  placeholder="Ingrese el contacto telefónico del proveedor"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="correoProveedor">Correo Electrónico:</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="correoProveedor"
+                  placeholder="Ingrese el correo electrónico del proveedor"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="imagenProveedor">Imagen:</label>
+                <input
+                  type="file"
+                  class="form-control-file"
+                  id="imagenProveedor"
+                  required
+                />
+              </div>
+              <button type="submit" class="btn btn-success">Registrar</button>
+            </form>
+          </div>
+          <!-- Fin del formulario de registro de proveedor -->
+
+          <!-- Botón para mostrar el formulario de registro -->
+          <button
+            type="button"
+            class="btn btn-primary"
+            id="btnMostrarRegistroProveedor"
+          >
+            Registrar Proveedor LOCAL
+          </button>
+
+          <!-- Resultados -->
+          <h1>Resultados</h1>
+          <div class="proveedores-container">
+            <div class="proveedor">
+              <img
+                src="C:\Users\carom\Desktop\Planificador de Eventos Web\Proveedores\Proveedor1.jpg"
+                alt="Proveedor"
+              />
+              <div class="proveedor-info">
+                <a
+                  href="https://www.proveedores.com/proveedores/panaderia-salazar/"
+                  >Panaderia Salazar</a
+                >
+                <label><input type="checkbox" /> Seleccionar</label>
+              </div>
+            </div>
+            <div class="proveedor">
+              <img
+                src="C:\Users\carom\Desktop\Planificador de Eventos Web\Proveedores\Proveedor2.jpg"
+                alt="Proveedor"
+              />
+              <div class="proveedor-info">
+                <a href="https://www.proveedores.com/proveedores/juanito-baker/"
+                  >Juanito Baker</a
+                >
+                <label><input type="checkbox" /> Seleccionar</label>
+              </div>
+            </div>
+            <!-- Repite este bloque de proveedor para cada resultado -->
+          </div>
+
+          <!-- Botones para confirmar o cancelar selección -->
+          <button type="button" class="btn btn-success">
+            Confirmar Selección
+          </button>
+          <button type="button" class="btn btn-danger">
+            Cancelar Selección
+          </button>
+          <p>
+            -------------------------------------------------------------------------------------------------------------------------
+            -------------------------------------------------------------------------------------------------------------------------
+            -------------------------------------------------------------------------------------------------------------------------
+            -------------------------------------------------------------------------------------------------------------------------
+          </p>
+        </div>
+        <!--Fin de la seccion Proveedores-->
+
+        <!--Seccion Presupuesto-->
+        <div data-target="Presupuesto" class="col-sm-12 text-left">
+          <h3>Presupuesto</h3>
+          <label for="cantidad">Cantidad:</label>
+          <input type="number" id="cantidad" />
+          <button onclick="agregarGasto()">Agregar Gasto</button>
+          <br />
+          <label for="metodo">Método de Pago:</label>
+          <select id="metodo">
+            <option value="Depósito de Banco">Depósito de Banco</option>
+            <option value="PayPal">PayPal</option>
+            <option value="MasterCard">MasterCard</option>
+            <option value="Visa">Visa</option>
+          </select>
+
+          <div id="historial">
+            <h3>Historial de Gastos</h3>
+            <!-- Aquí se mostrarán los gastos registrados -->
+          </div>
+
+          <div id="total">
+            <h3>Total del Presupuesto</h3>
+            <p id="totalAmount"></p>
+          </div>
+
+          <div id="grafica">
+            <h3>Gráfica de Presupuesto vs. Gasto</h3>
+            <canvas id="graficaPastel"></canvas>
+          </div>
+        </div>
+        <!--Fin de la Seccion Presupuesto-->
+
+        <!-- Sección de Horario de Evento -->
+        <div data-target="HorarioEve" class="col-sm-12 text-left">
+          <h3>Línea de tiempo <span>10 a.m. - 12 p.m.</span></h3>
+          <div class="timeline">
+            <div id="linea"></div>
+            <div class="puntos">
+              <div class="dot-info" data-description="10:00 a.m.">
+                <span class="hour">10:00 a.m.</span>
+                <span class="label">Evento 1</span>
+                <input type="text" placeholder="Agrega información..." />
+                <button class="guardar">Guardar</button>
+              </div>
+              <div class="dot-info" data-description="11:00 a.m.">
+                <span class="hour">11:00 a.m.</span>
+                <span class="label">Evento 2</span>
+                <input type="text" placeholder="Agrega información..." />
+                <button class="guardar">Guardar</button>
+              </div>
+              <div class="dot-info" data-description="12:00 p.m.">
+                <span class="hour">12:00 p.m.</span>
+                <span class="label">Evento 3</span>
+                <input type="text" placeholder="Agrega información..." />
+                <button class="guardar">Guardar</button>
+              </div>
+              <!-- Agrega más puntos según sea necesario -->
+            </div>
+            <div id="timeline-descriptions-wrapper">
+              <p data-description="10:00 a.m."></p>
+              <p data-description="11:00 a.m."></p>
+              <p data-description="12:00 p.m."></p>
+              <!-- Agrega más descripciones según sea necesario -->
+            </div>
+          </div>
+        </div>
+        <!-- Fin de la Sección de Horario de Evento -->
+
+        <!--Seccion Informe-->
+        <div data-target="Informe" class="col-sm-12 text-left">
+          <h3>Informe</h3>
+          <p>
+            Quieres un resumen de tu Evento puedes generarlo a traves de aqui,
+            Con presionar el boton "Generar Informe" podras obtener los datos de
+            tus eventos como son la cantidad de invitados que fueron al evento,
+            al igual a la cantidad de invitados que no pudieron asistir al
+            evento. por favor asegurese de seleccionar el evento que desea
+            modificar.
+          </p>
+          <button onclick="generarInformePDF()">Generar Informe PDF</button>
+          <div id="resumenEvento">
+            <!-- Aquí se mostrará el resumen del evento -->
+          </div>
+
+          <!-- Sección para la vista previa del informe -->
+          <div id="vistaPreviaInforme" style="display: none">
+            <h2>Vista Previa del Informe</h2>
+            <div id="contenidoInforme">
+              <!-- Aquí se mostrará el contenido del informe -->
+            </div>
+          </div>
+        </div>
+        <!--Fin de la Sección Informe-->
+
+<!--Seccion LOGIN-->
+<div id="login-section" data-target="Login">
+  <h1>Iniciar Sesión</h1>
+  <form id="login-form" action="login.php" method="POST">
+    <div class="form-group">
+      <label for="username">Nombre del Usuario:</label>
+      <input
+        type="text"
+        class="form-control text-center"
+        id="username"
+        name="username"
+        placeholder="Ingresa tu nombre de usuario"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <label for="password">Contraseña:</label>
+      <input
+        type="password"
+        class="form-control text-center"
+        id="password"
+        name="password"
+        placeholder="Ingresa tu contraseña"
+        autocomplete="current-password"
+        required
+      />
+    </div>
+    <button type="submit" class="btn btn-primary">
+      Iniciar Sesión
+    </button>
+  </form>
+  <!-- Botón de registro (submit) -->
+  <button type="button" class="btn btn-default" id="btn-register">
+    Registrarse
+  </button>
+</div>
+<!--Fin de la Seccion Login-->
+
+<!-- Formulario de cierre de sesión (oculto inicialmente) -->
+<div id="logout-section" data-target="Logout" style="display: none" class="container-fluid text">
+  <h1>Cerrar Sesión</h1>
+  <form id="logout-form" action="logout.php" method="POST">
+    <button type="submit" class="btn btn-danger">Cerrar Sesión</button>
+  </form>
+</div>
+<!-- Fin del formulario de cierre de sesión -->
+
+
+
+        <!-- Formulario de registro (oculto inicialmente) -->
+        <div id="register-form" style="display: none" class="container-fluid text">
+          <h2>Registrarse</h2>
+          <form id="registro-form" action="registro.php" method="POST">
+            <div class="form-group">
+              <label for="nombre">Nombre:</label>
+              <input
+                type="text"
+                class="form-control text-center"
+                id="nombre"
+                name="nombre"
+                placeholder="Ingresa tu nombre"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="apellido-paterno">Apellido Paterno:</label>
+              <input
+                type="text"
+                class="form-control text-center"
+                id="apellido-paterno"
+                name="apellido-paterno"
+                placeholder="Ingresa tu Apellido Paterno"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="apellido-materno">Apellido Materno:</label>
+              <input
+                type="text"
+                class="form-control text-center"
+                id="apellido-materno"
+                name="apellido-materno"
+                placeholder="Ingresa tu Apellido Materno"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="correo">Correo Electrónico:</label>
+              <input
+                type="email"
+                class="form-control text-center"
+                id="correo"
+                name="correo_electronico"
+                placeholder="Ingrese su correo Electronico"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="telefono">Número Telefónico:</label>
+              <input
+                type="tel"
+                class="form-control text-center"
+                id="telefono"
+                name="telefono"
+                placeholder="Ingrese su numero telefonico"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="password">Contraseña:</label>
+              <input
+                type="password"
+                class="form-control text-center"
+                id="password"
+                name="password"
+                placeholder="ingrese una Contraseña segura"
+                required
+              />
+            </div>
+            <button type="submit" class="btn btn-primary">Registrarse</button>
+          </form>
+        </div>
+        <!-- FINAL Formulario de registro (oculto inicialmente) -->
+
+        <!--Seccion de GoogleApi-->
+        <div data-target="API">
+          <button id="authorize_button" onclick="handleAuthClick()">
+            Autorizar
+          </button>
+          <button id="signout_button" onclick="handleSignoutClick()">
+            Cerrar Sesión
+          </button>
+          <pre id="content" style="white-space: pre-wrap"></pre>
+          <script src="./script.js" type="text/javascript"></script>
+          <script
+            async
+            defer
+            src="https://apis.google.com/js/api.js"
+            onload="gapiLoaded()"
+          ></script>
+          <script
+            async
+            defer
+            src="https://accounts.google.com/gsi/client"
+            onload="gisLoaded()"
+          ></script>
+
+          <form id="event_form">
+            <fieldset>
+              <input
+                type="text"
+                name="title"
+                id="title"
+                placeholder="Add Title"
+                class="input-title"
+              />
+              <br />
+              <textarea
+                type="text"
+                name="desc"
+                id="desc"
+                placeholder="Add Descreption"
+                class="input-title"
+              ></textarea>
+              <br />
+              <label>Date</label>
+              <input type="date" name="date" id="date" />
+              <div>
+                <label>Start Time</label>
+                <input type="time" name="st" id="st" />
+                <label>End Time</label>
+                <input type="time" name="et" id="et" />
+              </div>
+              <button type="button" onclick="addEvent()">Schedule</button>
+            </fieldset>
+          </form>
+        </div>
+        <!-- Fin de la Seccion de GoogleApi-->
+      </div>
+    </div>
+
+    <footer class="Pie de Pagina" style="position: fixed">
+      <p>Pie de Pagina</p>
+    </footer>
+  </body>
+</html>

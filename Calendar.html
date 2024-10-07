@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Título de la Página</title>
+
+    <!--CSS-->
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/datatables.min.css" />
+    <link rel="stylesheet" href="fullcalendar/main.css" />
+    <!--CSS-->
+    <!--JS-->
+    <script src="js/jquery-3.7.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/datatables.min.js"></script>
+    <script src="js/moment-with-locales.js"></script>
+    <script src="fullcalendar/main.js"></script>
+    <!--JS-->
+  </head>
+  <body>
+    <button onclick="location.href='SSPEW.html'">Regresar</button>
+    <div id="Calendario1" style="border: 1px solid #000; padding: 2px"></div>
+    
+    <!-- Formulario de eventos -->
+
+    <div class="modal fade" id="FormularioEventos" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button
+              type="button"
+              class="close"
+              data-bs-dismisss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">X</span>
+            </button>
+          </div>
+
+          <div class="modal-body">
+            <input type="hidden" id="Id" />
+
+            <div class="form-row">
+              <div class="form-group col-md-12">
+                <label for="">Titulo del Evento:</label>
+                <input
+                  type="text"
+                  id="Titulo"
+                  class="form-control"
+                  placeholder=""
+                />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="">Fecha de inicio:</label>
+                <div class="input-group" data-autoclose="true">
+                  <input type="date" id="FechaInicio" class="form-control" />
+                </div>
+              </div>
+              <div class="form-group col-md-6" id="TituloHoraInicio">
+                <label for="">Hora de inicio</label>
+                <div class="input-group clockpicker" data-autoclose="true">
+                  <input
+                    type="time"
+                    id="HoraInicio"
+                    class="form-control"
+                    autocomplete="off"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="">Fecha de fin:</label>
+                <div class="input-group" data-autoclose="true">
+                  <input type="date" id="FechaFin" class="form-control" />
+                </div>
+              </div>
+              <div class="form-group col-md-6" id="TituloHoraFin">
+                <label for="">Hora de fin</label>
+                <div class="input-group clockpicker" data-autoclose="true">
+                  <input
+                    type="time"
+                    id="HoraFin"
+                    class="form-control"
+                    autocomplete="off"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <label for="">Descripcion:</label>
+              <textarea
+                id="Descripcion"
+                class="form-control"
+                rows="3"
+              ></textarea>
+            </div>
+            <div class="form-row">
+              <label for="">Color de fondo:</label>
+              <input
+                type="color"
+                value="#3788D8"
+                id="ColorFondo"
+                class="form-control"
+                style="height: 36px"
+              />
+            </div>
+            <div class="form-row">
+              <label for="">Color de texto:</label>
+              <input
+                type="color"
+                value="#ffffff"
+                id="ColorTexto"
+                class="form-control"
+                style="height: 36px"
+              />
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" id="BotonAgregar" class="btn btn-success">
+              Agregar
+            </button>
+            <button type="button" id="BotonBorrar" class="btn btn-success">
+              Borrar
+            </button>
+            <button
+              type="button"
+              id="BotonCancelar"
+              class="btn btn-success"
+              data-bs-dismiss="modal"
+            >
+              Cancelar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      //$('.clockpicker').clockpicker();
+
+      let Calendario1 = new FullCalendar.Calendar(
+        document.getElementById("Calendario1"),
+        {
+
+          headerToolbar:{
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+
+          },
+          editable: true,  
+
+          events: "datoseventos.php?accion=listar",
+          dateClick: function (info) {
+            //alert(info.dateStr)
+            //limpiarFormulario();
+            $("#BotonAgregar").show();
+            $("#BotonBorrar").hide();
+
+            if (info.allDay) {
+              $("#FechaInicio").val(info.dateStr);
+              $("#FechaFin").val(info.dateStr);
+            } else {
+              let fechaHora = info.dateStr.split("T");
+              $('#FechaInicio').val(fechaHora[0]);
+              $('#FechaFin').val(fechaHora[0]);
+              $('#HoraInicio').val(fechaHora[1].substring(0,5));
+
+            }
+
+            $("#FormularioEventos").modal("show");
+          },
+          eventClick: function (info) {
+            $("#BotonAgregar").hide();
+            $("#BotonBorrar").show();
+
+            $("#Id").val(info.event.id);
+            $("#Titulo").val(info.event.title);
+            $("#Descripcion").val(info.event.extendedProps.descripcion);
+            $("#FechaInicio").val(
+              moment(info.event.start).format("YYYY-MM-DD")
+            );
+            $("#FechaFin").val(moment(info.event.end).format("YYYY-MM-DD"));
+            $("#HoraInicio").val(moment(info.event.start).format("HH:mm"));
+            $("#HoraFin").val(moment(info.event.end).format("HH:mm"));
+            $("#ColorFondo").val(info.event.backgroundColor);
+            $("#ColorTexto").val(info.event.textColor);
+
+            $("#FormularioEventos").modal("show");
+          },
+        eventDrop: function(info){
+          $("#Id").val(info.event.id);
+            $("#Titulo").val(info.event.title);
+            $("#Descripcion").val(info.event.extendedProps.descripcion);
+            $("#FechaInicio").val(moment(info.event.start).format("YYYY-MM-DD"));
+            $("#FechaFin").val(moment(info.event.end).format("YYYY-MM-DD"));
+            $("#HoraInicio").val(moment(info.event.start).format("HH:mm"));
+            $("#HoraFin").val(moment(info.event.end).format("HH:mm"));
+            $("#ColorFondo").val(info.event.backgroundColor);
+            $("#ColorTexto").val(info.event.textColor);
+
+            let registro = recuperarDatosFormulario();
+            modificarRegistro(registro);
+        }
+      });
+
+      Calendario1.render();
+
+      //eventos de botones de la aplicacion
+      $("#BotonAgregar").click(function () {
+        let registro = recuperarDatosFormulario();
+        agregarRegistro(registro);
+        $("#FormularioEventos").modal("hide");
+      });
+
+      $('#BotonBorrar').click(function(){
+        let registro = recuperarDatosFormulario();
+        borrarRegistro(registro);
+        $("#FormularioEventos").modal("hide");
+      });
+
+      //funciones para comunicarse con el servidor AJAX
+
+      function agregarRegistro(registro) {
+        $.ajax({
+          type: "POST",
+          url: "datoseventos.php?accion=agregar",
+          data: registro,
+          success: function (msg) {
+            Calendario1.refetchEvents();
+          },
+          error: function (error) {
+            alert("hubo un error al agregar el evento: " + error);
+          },
+        });
+      }
+
+      function modificarRegistro(registro){
+        $.ajax({
+          type: "POST",
+          url: "datoseventos.php?accion=modificar",
+          data: registro,
+          success: function (msg) {
+            Calendario1.refetchEvents();
+          },
+          error: function (error) {
+            alert("hubo un error al modificar el evento: " + error);
+          },
+        });
+      }
+
+      function borrarRegistro(registro) {
+        $.ajax({
+          type: "POST",
+          url: "datoseventos.php?accion=borrar",
+          data: registro,
+          success: function (msg) {
+            Calendario1.refetchEvents();
+          },
+          error: function (error) {
+            alert("hubo un error al borrar el evento: " + error);
+          },
+        });
+      }
+
+      //funciones que interactuan con el formularioEventos
+      function limpiarFormulario() {
+        $("#Id"), val("");
+        $("#Titulo"), val("");
+        $("#Descripcion"), val("");
+        $("#FechaFin"), val("");
+        $("#FechaInicio"), val("");
+        $("#HoraInicio"), val("");
+        $("#HoraFin"), val("");
+        $("#ColorFondo"), val("#3788D8");
+        $("#ColorTexto"), val("#ffffff");
+      }
+
+      function recuperarDatosFormulario() {
+        let registro = {
+          id: $("#Id").val(),
+          titulo: $("#Titulo").val(),
+          descripcion: $("#Descripcion").val(),
+          inicio: $("#FechaInicio").val() + " " + $("#HoraInicio").val(),
+          fin: $("#FechaFin").val() + " " + $("#HoraFin").val(),
+          colorfondo: $("#ColorFondo").val(),
+          colortexto: $("#ColorTexto").val(),
+        };
+        return registro;
+      }
+    </script>
+  </body>
+</html>
